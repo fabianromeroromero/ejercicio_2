@@ -1,6 +1,7 @@
 package com.example.ejercicio2;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,15 +12,23 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ejercicio2.adapters.ProductAdapter;
+import com.example.ejercicio2.database.ApiDummyJsonClient;
 import com.example.ejercicio2.models.Product;
+import com.example.ejercicio2.models.ResponseApi;
+import com.example.ejercicio2.services.ApiDummyjso;
 
 import java.util.LinkedList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
     RecyclerView rvProductos;
-
     ProductAdapter productAdapter;
+    LinkedList<Product> productos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,15 +37,32 @@ public class MainActivity extends AppCompatActivity {
 
         rvProductos = findViewById(R.id.rvProductos);
         rvProductos.setLayoutManager(new LinearLayoutManager(this));
-        productAdapter = new ProductAdapter(obtenerProductos());
-        rvProductos.setAdapter(productAdapter);
-
-
+        obtenerProducto();
     }
 
-    private LinkedList<Product> obtenerProductos(){
-        LinkedList<Product> products = new LinkedList<>();
-        products.add(new Product("Phone 15","apple", 1200, "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Football_in_Bloomington%2C_Indiana%2C_1995.jpg/640px-Football_in_Bloomington%2C_Indiana%2C_1995.jpg", 4.5f));
-        return products;
+    private LinkedList<Product> obtenerProducto(){
+        productos = new LinkedList<>();
+        ApiDummyjso api = ApiDummyJsonClient.getClient().create(ApiDummyjso.class);
+
+        Call<ResponseApi> call = api.getAllProduct();
+
+        call.enqueue(new Callback<ResponseApi>() {
+            @Override
+            public void onResponse(Call<ResponseApi> call, Response<ResponseApi> response) {
+                if(response.isSuccessful()){
+                    productAdapter = new ProductAdapter(response.body().getProducts());
+                    rvProductos.setAdapter(productAdapter);
+                }else {
+                    Toast.makeText(MainActivity.this,"Error de usuario",Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseApi> call, Throwable t) {
+                System.out.println("Error servidor: "+t.getMessage());
+                Toast.makeText(MainActivity.this,"Error en el servidor",Toast.LENGTH_LONG).show();
+            }
+        });
+        return productos;
     }
 }

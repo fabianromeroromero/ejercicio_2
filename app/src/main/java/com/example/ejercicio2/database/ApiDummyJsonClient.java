@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiDummyJsonClient {
 
-    private static Retrofit;
+    private static Retrofit retrofit;
 
     public static Retrofit getClient(){
         if (retrofit == null){

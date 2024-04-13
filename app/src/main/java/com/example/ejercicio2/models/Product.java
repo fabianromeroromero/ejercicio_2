@@ -2,6 +2,12 @@ package com.example.ejercicio2.models;
 
 public class Product {
 
+    private String title;
+    private String brand;
+    private double price;
+    private String thumbnail;
+    private float rating;
+
     public Product() {
     }
 
@@ -13,51 +19,40 @@ public class Product {
         this.rating = rating;
     }
 
-    private String title;
-
-    private String brand;
-
-    private double price;
-
-    private String thumbnail;
-
-    private float rating;
-
     public String getTitle() {
         return title;
-    }
-
-    public String getBrand() {
-        return brand;
-    }
-
-
-    public double getPrice() {
-        return price;
-    }
-
-    public String getThumbnail() {
-        return thumbnail;
-    }
-
-    public float getRating() {
-        return rating;
     }
 
     public void setTitle(String title) {
         this.title = title;
     }
 
+    public String getBrand() {
+        return brand;
+    }
+
     public void setBrand(String brand) {
         this.brand = brand;
+    }
+
+    public double getPrice() {
+        return price;
     }
 
     public void setPrice(double price) {
         this.price = price;
     }
 
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
     public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
+    }
+
+    public float getRating() {
+        return rating;
     }
 
     public void setRating(float rating) {
